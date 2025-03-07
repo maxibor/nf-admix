@@ -1,5 +1,12 @@
 include { PLINK_VCF } from './modules/nf-core/plink/vcf/main'
 include { ADMIXTURE  } from './modules/nf-core/admixture/main'
+include { validateParameters; paramsSummaryLog } from 'plugin/nf-schema'
+
+// Validate input parameters
+validateParameters()
+
+// Print summary of supplied parameters
+log.info paramsSummaryLog(workflow)
 
 workflow {
     
