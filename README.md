@@ -13,7 +13,7 @@ nextflow pull maxibor/nf-admix
 ## Run
 
 ```
-nextflow run maxibor/nf-admix --vcf /path/to/vcf --k_min 3 --k_min 5
+nextflow run maxibor/nf-admix --vcf /path/to/vcf --k_min 3 --k_max 5
 ```
 
 ## Help
