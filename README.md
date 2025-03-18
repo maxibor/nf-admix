@@ -33,7 +33,8 @@ Define where the pipeline should find input data and save output data.
 | `k_max` | Maximum number of clusters | `integer` | 5 |  |  |                                                              
 | `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud       
 infrastructure. | `string` | results | True |  |                                                                            
-| `const_fid` | Set a constant plink family ID. | `number` |  |  |  |                                                       
+| `const_fid` | Set a constant plink family ID. <details><summary>Help</summary><small>Fixes multiple underscore issue in   
+sample names when running unsupervised admixture. Set to other than 0 to activate</small></details>| `number` |  |  |  |                                                       
                                                                                                                             
 ## Other parameters                                                                                                         
                                                                                                                             

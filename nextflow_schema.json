@@ -37,7 +37,8 @@
         },
         "const_fid": {
           "type": "number",
-          "description": "Set a constant plink family ID."
+          "description": "Set a constant plink family ID.",
+          "help_text": "Fixes multiple underscore issue in sample names when running unsupervised admixture. Set to other than 0 to activate"
         }
       }
     }
