@@ -14,6 +14,7 @@ process ADMIXTURE {
     output:
     tuple val(meta), path("*.Q")    , emit: ancestry_fractions
     tuple val(meta), path("*.P")    , emit: allele_frequencies
+    tuple val(meta), path("*.log")  , emit: log
     path "versions.yml"             , emit: versions
 
     when:
@@ -30,7 +31,7 @@ process ADMIXTURE {
         $bed_ped_geno \\
         $K \\
         -j$task.cpus \\
-        $args
+        $args > ${prefix}.log
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
