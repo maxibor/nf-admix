@@ -28,6 +28,11 @@
           "default": 5,
           "description": "Maximum number of clusters"
         },
+        "best_n": {
+          "type": "integer",
+          "default": 2,
+          "description": "Plot best N ADMIXTURE plots"
+        },
         "outdir": {
           "type": "string",
           "format": "directory-path",
