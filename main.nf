@@ -1,5 +1,6 @@
-include { PLINK_VCF } from './modules/nf-core/plink/vcf/main'
-include { ADMIXTURE  } from './modules/nf-core/admixture/main'
+include { PLINK_VCF      } from './modules/nf-core/plink/vcf/main'
+include { ADMIXTURE      } from './modules/nf-core/admixture/main'
+include { PLOT_ADMIXTURE } from './modules/local/plot_admixture/main'
 include { validateParameters; paramsSummaryLog } from 'plugin/nf-schema'
 
 // Validate input parameters
@@ -37,6 +38,32 @@ workflow {
         }
 
     ADMIXTURE(ch_admix)
+
+    collect_ch = ADMIXTURE.out.ancestry_fractions
+        .map {
+            meta, q ->
+            [meta.subMap('id'), q]
+
+        }
+        .groupTuple()
+        .join (
+            ADMIXTURE.out.log
+            .map {
+                meta, log ->
+                [meta.subMap('id'), log]
+
+            }
+            .groupTuple()
+        )
+
+    collect_ch.view()
+
+    PLOT_ADMIXTURE(
+        collect_ch
+    )
+    
+
+
 
     
 
