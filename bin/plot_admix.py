@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import pandas as pd
 import re
+import numpy as np
 from plotnine import *
 
 def parse_args():
@@ -32,22 +33,23 @@ def get_cv_error(d="."):
                     k_list.append(k)
                     err_list.append(cv_err)
                     print(f"Looking at {k} fold admixture")
-                    if cv_err < min_err:
-                        min_err = cv_err
-                        best_k = k
-                        print(f"New best K: {best_k}, CV error: {min_err}")
 
-    return best_k, min_err, k_list, err_list
+    return np.array(k_list), np.array(err_list)
 
 def plot_cv_errors(k_list, err_list, output):
     df = pd.DataFrame({"K": k_list, "CV error": err_list})
     df = df.sort_values("K")
+    df.to_csv(f"{output}_cv_error.csv", index=False)
     g = (
         ggplot(df, aes(x='K', y='CV error')) 
         + geom_point() 
         + geom_line() 
         + labs(y='CV error', x='K') 
-        + theme_classic() 
+        + scale_x_continuous(breaks=range(df['K'].min(), df['K'].max()+1))
+        + theme_classic()
+        + theme(
+            axis_text_x=element_text(angle=90, hjust=1)
+        ) 
     )
     g.save(f"{output}_cv_error.png", dpi=300)
     g.save(f"{output}_cv_error.svg")
@@ -74,14 +76,13 @@ def plot_best(k, output, d = "."):
 
 if __name__ == "__main__":
     args = parse_args()
-    best_k, min_err, all_k, all_err = get_cv_error(args.dir)
+    all_k, all_err = get_cv_error(args.dir)
+    min_err = np.min(all_err)
+    best_k = all_k[np.argmin(all_err)]
     print(f"Best K: {best_k}, CV error: {min_err}")
     df_err = plot_cv_errors(all_k, all_err, args.output)
-    print(df_err)
-    for k in df_err['K'][:args.best]:
-        print(k)
+    for k in df_err.sort_values("CV error")['K'][:args.best]:
         plot_best(k, args.output, args.dir)
-    # plot_best(best_k, args.output, args.dir)
     
                     
 
